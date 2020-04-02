@@ -4,11 +4,63 @@ import 'package:get_it/get_it.dart';
 import 'logger.dart';
 import 'service_scale.dart';
 
+class CompoChord {
+
+  final Chord chord;
+  Chord get getChord => chord;
+  //void setChord(Chord chord) => _chord = chord;
+
+  CompoChord({
+    @required this.chord
+    });
+
+}
+
+class Compo {
+
+  final List<CompoChord> _composition = List<CompoChord>();
+  List<CompoChord> get getComposition => _composition;
+
+  void addChord(Chord chord) => _composition.add(CompoChord(chord: chord));
+
+}
+
 class ViewModelHome extends ChangeNotifier {
 
   final log = getLogger("ViewModelScale");
 
   final ServiceScale _serviceScale = GetIt.I.get<ServiceScale>();
+
+  int _currentIndex = 0;
+  int get getCurrentIndex => _currentIndex;
+  void setCurrentIndex(int i) { 
+    _currentIndex = i; 
+    notifyListeners(); 
+  }
+
+  int _selectedChord = 0;
+  int get getSelectedChord => _selectedChord;
+  void setSelectedChord(int index) { 
+    _selectedChord = index;
+    notifyListeners();
+  }
+
+  Compo _composition = Compo();
+  Compo get getComposition => _composition;
+  bool _isPlaying = false;
+  bool get isPlaying => _isPlaying;
+  void setIsPlaying(bool isPlaying) => _isPlaying = isPlaying;
+  int _selectedCompoSlot = 0;
+  int get selectedCompoSlot => _selectedCompoSlot;
+  void setSelectedCompoSlot(int slot) { 
+    _selectedCompoSlot = slot;
+    notifyListeners();
+  }
+  void clearCompo() { 
+    _composition.getComposition.clear();
+    notifyListeners();
+  }
+
   //final FlutterMidi player = FlutterMidi();
 
   //final ByteData _sound;
@@ -54,10 +106,8 @@ class ViewModelHome extends ChangeNotifier {
   }
 
   Future<void> makeScale() async {
-
-    //await init();
-
     _serviceScale.makeScale();
+    setSelectedChord(0);
     notifyListeners();    
   }
 
@@ -78,4 +128,12 @@ class ViewModelHome extends ChangeNotifier {
   List<ScaleType> get getScaleTypes => _serviceScale.getScaleTypes;
   List<String> get getNotes => _serviceScale.getAllNotes;
 
+
+  void addChordToCompo() { //Chord chord) {
+    log.i("addChordToCompo");
+    Chord chord = getChords[getSelectedChord];
+    log.i("chord:${chord.toString()}");
+      _composition.addChord(chord);
+      notifyListeners();
+  }
 }

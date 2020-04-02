@@ -16,13 +16,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Accordi App',
       home: Scaffold(
-      appBar: AppBar(
-        title: Text("Accordi"),
+        appBar: AppBar(
+          title: Text("Accordi"),
+        ),
+        body: WidgetHome(),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          WidgetHome(),
-        ])));
+    );
   }
 }
