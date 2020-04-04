@@ -10,12 +10,15 @@ import 'logger.dart';
 
 class Note {
   final String name;
-  final int octave;
+  int octave;
 
   Note(this.name, this.octave);
 
   @override
   String toString() => "$name$octave";
+
+  void incOctave() => octave++;
+  void decOctave() => octave--;
 }
 
 class ChordType {
@@ -43,7 +46,7 @@ class ChordType {
 }
 
 class Chord {
-  String tonic;
+  Note tonic;
   ChordType chordType;
   List<Note> notes;
 
@@ -55,9 +58,9 @@ class Chord {
 
   @override
   String toString() =>
-      "$tonic${chordType.toString()}";
+      "$tonic $chordType";
   String toStringExt() =>
-      "$tonic${chordType.toString()} : "+notes.fold("", (s,note)=> s += s==""?"${note.toString()}":",${note.toString()}");
+      "$tonic $chordType: "+notes.join(",");
 
 
 }
@@ -152,11 +155,20 @@ class ServiceScale {
   bool incOctave() {
     if (_selectedOctave==7) return false;
     _selectedOctave++;
+    
+    for(int i=0; i<_scale.length; i++) {
+      _scale[i].incOctave();
+    }
+
     return true;
   }
   bool decOctave() {
     if (_selectedOctave==0) return false;
     _selectedOctave--;
+
+    for(int i=0; i<_scale.length; i++) {
+      _scale[i].decOctave();
+    }
     return true;
   }
 
@@ -191,7 +203,7 @@ class ServiceScale {
       _intervalTypes.add(IntervalType.fromMap(DataMusicTheory.getAllIntervalTypes[i]));
     //_selectedChordType = _chordTypes.first;
 
-    makeScale();
+    //makeScale();
   }
 
 
@@ -245,7 +257,7 @@ class ServiceScale {
           }
 
           Chord chord = Chord(
-            tonic: tonic.name,
+            tonic: tonic,
             chordType: chordType,
             notes: notes
             );
@@ -344,42 +356,42 @@ class ServiceScale {
   //   return chord;
   // }
 
-  Chord _makeChordFromScale(
-      ScaleType scaleType, ChordType chordType, String tonic) {
-    log.i("makeChordFromScale");
-    List<Note> note = new List();
-    // chord.add(i); //getInterval(i,i+2));
-    // chord.add(i+2); //getInterval(i+2,i+4));
-    // chord.add(i+4); //getInterval(i+4,i+6));
-    // chord.add(i+6); //getInterval(i+6,i+8));
-    //chords.add( chord );
-    //}
-    // for(int c=0; c<chords.length; c++){
-    //   List chord = chords[c];
-    //   makeChord(chord);
-    // }
-    //String chordString = "";
-    for (int n = 0; n < chordType.gradi.length; n++) {
-      String grado = chordType.gradi[n];
+  // Chord _makeChordFromScale(
+  //     ScaleType scaleType, ChordType chordType, Note tonic) {
+  //   log.i("makeChordFromScale");
+  //   List<Note> note = new List();
+  //   // chord.add(i); //getInterval(i,i+2));
+  //   // chord.add(i+2); //getInterval(i+2,i+4));
+  //   // chord.add(i+4); //getInterval(i+4,i+6));
+  //   // chord.add(i+6); //getInterval(i+6,i+8));
+  //   //chords.add( chord );
+  //   //}
+  //   // for(int c=0; c<chords.length; c++){
+  //   //   List chord = chords[c];
+  //   //   makeChord(chord);
+  //   // }
+  //   //String chordString = "";
+  //   for (int n = 0; n < chordType.gradi.length; n++) {
+  //     String grado = chordType.gradi[n];
 
-      int index = scaleType.gradi.indexOf(grado);
+  //     int index = scaleType.gradi.indexOf(grado);
 
-      if (index == -1)
-        throw Exception("grado $grado non in scala ${scaleType.toString()}");
+  //     if (index == -1)
+  //       throw Exception("grado $grado non in scala ${scaleType.toString()}");
 
-      Note nota = _scale[index];
+  //     Note nota = _scale[index];
 
-      //if (grade>=_scale.length) grade -= _scale.length;
+  //     //if (grade>=_scale.length) grade -= _scale.length;
 
-      note.add(nota);
+  //     note.add(nota);
 
-      //chordString += getNote(note);
-      //chordString += n < chord.length-1 ? " (" + getIntervalName(getInterval(chord[n],chord[n+1]))+") " : "";
-      //print("${ getNote(note) } ${ getIntervalName(chords[n][0]) }");
-    }
-    log.i(note.fold<String>("", (s, note) => s += note.toString()));
-    return Chord(chordType: chordType, notes: note, tonic: tonic);
-  }
+  //     //chordString += getNote(note);
+  //     //chordString += n < chord.length-1 ? " (" + getIntervalName(getInterval(chord[n],chord[n+1]))+") " : "";
+  //     //print("${ getNote(note) } ${ getIntervalName(chords[n][0]) }");
+  //   }
+  //   log.i(note.fold<String>("", (s, note) => s += note.toString()));
+  //   return Chord(chordType: chordType, notes: note, tonic: tonic);
+  // }
 
   void reset() {
     log.i("reset");
@@ -434,7 +446,7 @@ class ServiceScale {
       _scale.add(Note(getAllNotes[startNote], octave));
       startNote += scaleType.intervalli[i];
     }
-    log.i(_scale.fold("", (s, note) => s += note.toString()));
+    log.i("Scale: ${_scale.join(",")}");
 
     // List chords = new List();
     // for(int i=1; i<=_scaleType.length; i++){
@@ -443,6 +455,7 @@ class ServiceScale {
     // print(chords.toString());
     // makeChordProg(0);
 
+    log.i("Getting chords for scale...");
     for(int i=0; i<_scale.length; i++){
       Note note = _scale[i];
       _chords.addAll( _getChordTypesFor(scaleType, note) );
@@ -480,19 +493,19 @@ class ServiceScale {
   //   return interval;
   // }
 
-  String getChordName(List chord) {}
+  //String getChordName(List chord) {}
 
-  String getIntervalName(int i) {
-    String intName = "";
-    switch (i) {
-      case 4:
-        intName = "M";
-        break;
-      case 3:
-        intName = "m";
-        break;
-      default:
-    }
-    return intName;
-  }
+  // String getIntervalName(int i) {
+  //   String intName = "";
+  //   switch (i) {
+  //     case 4:
+  //       intName = "M";
+  //       break;
+  //     case 3:
+  //       intName = "m";
+  //       break;
+  //     default:
+  //   }
+  //   return intName;
+  // }
 }

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
+import 'config.dart';
 import 'logger.dart';
 import 'service_scale.dart';
+import 'service_settings.dart';
 
 class CompoChord {
 
@@ -25,11 +27,25 @@ class Compo {
 
 }
 
+class SelectedNote {
+  Note note;
+  ConfigColorNote color;
+  SelectedNote(this.note, this.color);
+
+  @override
+  String toString() => "${note.name} ${color.toString()}";
+}
+
 class ViewModelHome extends ChangeNotifier {
 
   final log = getLogger("ViewModelScale");
 
   final ServiceScale _serviceScale = GetIt.I.get<ServiceScale>();
+  final ServiceSettings _serviceSettings = GetIt.I.get<ServiceSettings>();
+
+  ViewModelHome(){
+    makeScale();
+  }
 
   int _currentIndex = 0;
   int get getCurrentIndex => _currentIndex;
@@ -38,10 +54,49 @@ class ViewModelHome extends ChangeNotifier {
     notifyListeners(); 
   }
 
-  int _selectedChord = 0;
-  int get getSelectedChord => _selectedChord;
-  void setSelectedChord(int index) { 
-    _selectedChord = index;
+  List<SelectedNote> _selectedNotes = List<SelectedNote>();
+  List<SelectedNote> get getSelectedNotes => _selectedNotes;
+  bool isNoteSelected(Note n) => _selectedNotes.indexWhere(
+      (note) => note.note.name==n.name
+      )!=-1;
+  ConfigColorNote _getFirstUnusedColor() {
+    log.i("_getFirstUnusedColor");
+    for(int i=0; i<Config.COLOR_SELECTED_NOTES.length; i++){
+      ConfigColorNote ccn = Config.COLOR_SELECTED_NOTES[i];
+      int ii = _selectedNotes.indexWhere((note)=>note.color.back == ccn.back);
+      if (ii==-1) return ccn;
+    }
+    return Config.COLOR_SELECTED_NOTES[0];
+  }
+  void toggleSelectedNote(Note n) {
+    log.i("toggleSelectedNote | note:${n.name}");
+    if (isNoteSelected(n))
+      _selectedNotes.removeWhere((snote)=>snote.note.name == n.name);
+    else {
+      // get not used color
+      ConfigColorNote ccn = _getFirstUnusedColor();
+      _selectedNotes.add( SelectedNote(n, ccn) );
+    }
+    log.i("_selectedNotes: ${_selectedNotes.join(",")}");
+    notifyListeners();
+  }
+  ConfigColorNote getColorForNote(Note n) {
+    //log.i("getColorForNote | note:${n.name}");
+    SelectedNote sn = 
+      getSelectedNotes.singleWhere((snote) => snote.note.name == n.name);
+    //if (i == -1) throw Exception("Cannot find color for note ${n.toString()}");
+    //log.i("getColorForNote | color:${sn.color.toString()}");
+    return sn.color;
+  }
+  
+  Chord _selectedChord;
+  Chord get getSelectedChord => _selectedChord;
+  //{
+    //if (_selectedChord==-1) return null;
+    //return getChords[ _selectedChord ];
+  //}
+  void setSelectedChord(Chord chord) { 
+    _selectedChord = chord;
     notifyListeners();
   }
 
@@ -58,6 +113,22 @@ class ViewModelHome extends ChangeNotifier {
   }
   void clearCompo() { 
     _composition.getComposition.clear();
+    notifyListeners();
+  }
+
+  int get getBpm => _serviceSettings.getBpm ?? Config.DEFAULT_BPM;
+  Future<void> incBpm() async {
+    await _serviceSettings.setBpm( _serviceSettings.getBpm+1 );
+    notifyListeners();
+  }
+  Future<void> decBpm() async {
+    await _serviceSettings.setBpm( _serviceSettings.getBpm-1 );
+    notifyListeners();
+  }
+
+  bool get getDisplayChordsByType => _serviceSettings.getDisplayChordsByType ?? false;
+  Future<void> setDisplayChordsByType(bool value) async {
+    await _serviceSettings.seDisplayChordsByType(value);
     notifyListeners();
   }
 
@@ -98,16 +169,31 @@ class ViewModelHome extends ChangeNotifier {
   int get getSelectedOctave => _serviceScale.getSelectedOctave;
   void incOctave() {
     log.i("incOctave");
-    if (_serviceScale.incOctave()) makeScale();
+    //if (_serviceScale.incOctave()) makeScale();
+    _serviceScale.incOctave();
+    notifyListeners();
   }
   void decOctave() {
     log.i("incOctave");
-    if (_serviceScale.decOctave()) makeScale();
+    //if (_serviceScale.decOctave()) makeScale();
+    _serviceScale.decOctave();
+    notifyListeners();
+  }
+
+  void selectAllScaleNotes() {
+    log.i("selectAllScaleNotes");
+    getScale.forEach((note)=>toggleSelectedNote(note));
+    log.i("Selected notes: ${getSelectedNotes.join(",")}");
   }
 
   Future<void> makeScale() async {
+    log.i("makeScale");
     _serviceScale.makeScale();
-    setSelectedChord(0);
+    //setSelectedChord(0);
+    _selectedChord = null;
+    _selectedNotes.clear();
+
+    selectAllScaleNotes();
     notifyListeners();    
   }
 
@@ -129,10 +215,10 @@ class ViewModelHome extends ChangeNotifier {
   List<String> get getNotes => _serviceScale.getAllNotes;
 
 
-  void addChordToCompo() { //Chord chord) {
-    log.i("addChordToCompo");
-    Chord chord = getChords[getSelectedChord];
-    log.i("chord:${chord.toString()}");
+  void addChordToCompo(Chord chord) { //Chord chord) {
+    log.i("addChordToCompo chord:${chord.toString()}");
+    //Chord chord = getSelectedChord; //getChords[getSelectedChord];
+    //log.i("chord:${chord.toString()}");
       _composition.addChord(chord);
       notifyListeners();
   }

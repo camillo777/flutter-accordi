@@ -15,16 +15,30 @@ class WidgetConfig extends StatelessWidget {
     return Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
+                Divider(
+                  height: 15,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-                    Text("Ottava"),
-                    CustomButton(onPressed: () => model.decOctave(), text: "-"),
+                    Text("Ottava", style: Config.TS_TITLE),
+                    CustomButton(
+                      onPressed: () => model.decOctave(), 
+                      text: "-",
+                      enabled: model.getSelectedOctave>0?true:false,
+                    ),
                     Text(model.getSelectedOctave.toString(), style: TextStyle(fontSize: 32)),
-                    CustomButton(onPressed: () => model.incOctave(), text: "+"),
+                    CustomButton(
+                      onPressed: () => model.incOctave(), 
+                      text: "+", 
+                      enabled: model.getSelectedOctave<7?true:false,
+                      ),
                   ],
                 ),
-                Text("Tonica"),
+                Divider(
+                  height: 15,
+                ),
+                Text("Tonica", style: Config.TS_TITLE),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: model.getNotes
@@ -45,7 +59,7 @@ class WidgetConfig extends StatelessWidget {
                 Divider(
                   height: 15,
                 ),
-                Text("Tipo scala"),
+                Text("Tipo scala", style: Config.TS_TITLE),
                 Wrap(
                   //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: model.getScaleTypes
@@ -68,7 +82,43 @@ class WidgetConfig extends StatelessWidget {
                 ),
                 Divider(
                   height: 15,
-                )]
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Text("BPM", style: Config.TS_TITLE),
+                    CustomButton(
+                      onPressed: () async => await model.decBpm(), 
+                      text: "-",
+                      enabled: model.getBpm>0?true:false,
+                    ),
+                    Text(model.getBpm.toString(), style: TextStyle(fontSize: 32)),
+                    CustomButton(
+                      onPressed: () async => await model.incBpm(), 
+                      text: "+", 
+                      enabled: model.getBpm<200?true:false,
+                      ),
+                  ],
+                ),
+                Divider(
+                  height: 15,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Text("Mostra accordi per tipo", style: Config.TS_TITLE),
+                    Switch(
+                      onChanged: (bool value) async => await model.setDisplayChordsByType(value),
+                      value: model.getDisplayChordsByType,
+                      activeColor: Config.COLOR_MAIN,
+                      activeTrackColor: Config.COLOR_MAIN,
+                    ),
+                  ],
+                ),
+                Divider(
+                  height: 15,
+                ),
+                ],
                 );
   }
   

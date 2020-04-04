@@ -1,7 +1,6 @@
 import 'package:accordi/widget_custombutton.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:reorderables/reorderables.dart';
 
 import 'config.dart';
 import 'logger.dart';
@@ -163,8 +162,8 @@ class WidgetCompose extends StatelessWidget {
   Future<void> playCompo(ViewModelHome model) async {
     log.i("playCompo");
 
-    const double BPM = 90;
-    int noteDuration = (1000 * (BPM / 60) / 4).floor();
+    double bpm = model.getBpm.toDouble(); // 90;
+    int noteDuration = (1000 * (bpm / 60) / 4).floor();
     log.i("noteDuration:$noteDuration");
 
     //int noteDuration = (1000 / chord.notes.length).floor();

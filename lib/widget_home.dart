@@ -64,41 +64,42 @@ class _WidgetHomeState extends State<WidgetHome>
                 Expanded(
                   child: TabBarView(controller: _tabController, children: [
                     WidgetConfig(),
-                    Padding(
-                      padding: EdgeInsets.all(20),
-                      child: Container(
-                        //color: Config.COLOR_MAIN,
-                          padding: EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            //color: Config.COLOR_MAIN,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Color.fromARGB(255, 135, 155, 155),
-                                blurRadius:
-                                    5.0, // has the effect of softening the shadow
-                                spreadRadius:
-                                    0, // has the effect of extending the shadow
-                                offset: Offset(
-                                  1.0, // horizontal, move right 10
-                                  1.0, // vertical, move down 10
-                                ),
-                              )
-                            ],
-                            borderRadius:
-                                new BorderRadius.all(Radius.circular(5)),
-                            color: Color.fromARGB(255, 235, 255, 255),
-                            // gradient: new LinearGradient(
-                            //   colors: [
-                            //   Color.fromARGB(255, 250, 250, 250),
-                            //   Color.fromARGB(255, 260, 260, 260),
-                            // ]),
-                          ),
-                          child: WidgetChoose()),
-                    ),
+                    WidgetChoose(),
                     WidgetCompose(),
                   ]),
                 ),
               ]);
         }));
+  }
+
+  Widget _buildCard(Widget child) {
+    return Padding(
+      padding: EdgeInsets.all(20),
+      child: Container(
+          //color: Config.COLOR_MAIN,
+          padding: EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            //color: Config.COLOR_MAIN,
+            boxShadow: [
+              BoxShadow(
+                color: Color.fromARGB(255, 135, 155, 155),
+                blurRadius: 5.0, // has the effect of softening the shadow
+                spreadRadius: 0, // has the effect of extending the shadow
+                offset: Offset(
+                  1.0, // horizontal, move right 10
+                  1.0, // vertical, move down 10
+                ),
+              )
+            ],
+            borderRadius: new BorderRadius.all(Radius.circular(5)),
+            color: Color.fromARGB(255, 235, 255, 255),
+            // gradient: new LinearGradient(
+            //   colors: [
+            //   Color.fromARGB(255, 250, 250, 250),
+            //   Color.fromARGB(255, 260, 260, 260),
+            // ]),
+          ),
+          child: child),
+    );
   }
 }
