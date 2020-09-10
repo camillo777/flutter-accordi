@@ -5,50 +5,50 @@ class DataMusicTheory {
   static List<Map> get getAllIntervalTypes => _intervalTypesAll;
 
   // Successione intervallare scale
-  static Map<String, List<int>> _scaleTypesRaw = {
-    "Diatonica Maggiore": [2, 2, 1, 2, 2, 2, 1],
-    "Pentatonica maggiore": [2, 2, 3, 2, 3],
-    "Minore naturale": [2, 1, 2, 2, 1, 2, 2],
-    "Minore melodica": [2, 1, 2, 2, 2, 2, 1],
-    "Minore armonica": [2, 1, 2, 2, 1, 3, 1],
-    "Maggiore armonica": [2, 2, 1, 2, 1, 3, 1],
-    "Orientale": [1, 3, 1, 1, 3, 1, 2],
-    "Ungherese maggiore": [3, 1, 2, 1, 2, 1, 2],
-    "Enigmatica": [1, 3, 2, 2, 2, 1, 1],
-    "Napoletana": [1, 2, 2, 2, 2, 2, 1],
-    "Napoletana minore": [1, 2, 2, 2, 1, 3, 1],
-    "Ionica": [2, 2, 1, 2, 2, 2, 1],
-    "Dorica": [2, 1, 2, 2, 2, 1, 2],
-    "Frigia": [1, 2, 2, 2, 1, 2, 2],
-    "Lidia": [2, 2, 2, 1, 2, 2, 1],
-    "Misolidia": [2, 2, 1, 2, 2, 1, 2],
-    "Eolia": [2, 1, 2, 2, 1, 2, 2],
-    "Locria": [1, 2, 2, 1, 2, 2, 2]
-  };
+  // static Map<String, List<int>> _scaleTypesRaw = {
+  //   "Diatonica Maggiore": [2, 2, 1, 2, 2, 2, 1],
+  //   "Pentatonica maggiore": [2, 2, 3, 2, 3],
+  //   "Minore naturale": [2, 1, 2, 2, 1, 2, 2],
+  //   "Minore melodica": [2, 1, 2, 2, 2, 2, 1],
+  //   "Minore armonica": [2, 1, 2, 2, 1, 3, 1],
+  //   "Maggiore armonica": [2, 2, 1, 2, 1, 3, 1],
+  //   "Orientale": [1, 3, 1, 1, 3, 1, 2],
+  //   "Ungherese maggiore": [3, 1, 2, 1, 2, 1, 2],
+  //   "Enigmatica": [1, 3, 2, 2, 2, 1, 1],
+  //   "Napoletana": [1, 2, 2, 2, 2, 2, 1],
+  //   "Napoletana minore": [1, 2, 2, 2, 1, 3, 1],
+  //   "Ionica": [2, 2, 1, 2, 2, 2, 1],
+  //   "Dorica": [2, 1, 2, 2, 2, 1, 2],
+  //   "Frigia": [1, 2, 2, 2, 1, 2, 2],
+  //   "Lidia": [2, 2, 2, 1, 2, 2, 1],
+  //   "Misolidia": [2, 2, 1, 2, 2, 1, 2],
+  //   "Eolia": [2, 1, 2, 2, 1, 2, 2],
+  //   "Locria": [1, 2, 2, 1, 2, 2, 2]
+  // };
   //static Map<String,List<int>> get getAllScaleTypes => _scaleTypes;
 
 // Gradi costitutivi (gc.) scale
-  static Map<String, List<String>> _scaleTypesGCRaw = {
-    "Diatonica maggiore": ["1", "2", "3", "4", "5", "6", "7"], // modo 1 ionico
-    "Pentatonica maggiore": ["1", "2", "3", "5", "6"],
-    "Minore naturale": ["1", "2", "3b", "4", "5", "6b", "7b"], // eolio
-    "Minore melodica": ["1", "2", "3b", "4", "5", "6", "7"],
-    "Minore armonica": ["1", "2", "3b", "4", "5", "6b", "7"],
-    "Maggiore armonica": ["1", "2", "3", "4", "5", "6b", "7"],
-    "Orientale": ["1", "2b", "3", "4", "5b", "6", "7b"],
-    "Ungherese maggiore": ["1", "2#", "3", "4#", "5", "6", "7b"],
-    "Enigmatica": ["1", "2b", "3", "4#", "5#", "6#", "7"],
-    "Napoletana": ["1", "2b", "3b", "4", "5", "6b", "7"],
-    "Napoletana minore": ["1", "2b", "3b", "4", "5", "6b", "7"],
+  // static Map<String, List<String>> _scaleTypesGCRaw = {
+  //   "Diatonica maggiore": ["1", "2", "3", "4", "5", "6", "7"], // modo 1 ionico
+  //   "Pentatonica maggiore": ["1", "2", "3", "5", "6"],
+  //   "Minore naturale": ["1", "2", "3b", "4", "5", "6b", "7b"], // eolio
+  //   "Minore melodica": ["1", "2", "3b", "4", "5", "6", "7"],
+  //   "Minore armonica": ["1", "2", "3b", "4", "5", "6b", "7"],
+  //   "Maggiore armonica": ["1", "2", "3", "4", "5", "6b", "7"],
+  //   "Orientale": ["1", "2b", "3", "4", "5b", "6", "7b"],
+  //   "Ungherese maggiore": ["1", "2#", "3", "4#", "5", "6", "7b"],
+  //   "Enigmatica": ["1", "2b", "3", "4#", "5#", "6#", "7"],
+  //   "Napoletana": ["1", "2b", "3b", "4", "5", "6b", "7"],
+  //   "Napoletana minore": ["1", "2b", "3b", "4", "5", "6b", "7"],
 
-    "Ionica": ["1", "2", "3", "4", "5", "6", "7"],
-    "Dorica": ["1", "2", "3b", "4", "5", "6", "7b"],
-    "Frigia": ["1", "2b", "3", "4", "5", "6b", "7b"],
-    "Lidia": ["1", "2", "3", "4#", "5", "6", "7"],
-    "Misolidia": ["1", "2", "3", "4", "5", "6", "7b"],
-    "Eolia": ["1", "2", "3b", "4", "5", "6b", "7b"],
-    "Locria": ["1", "2b", "3b", "4", "5b", "6b", "7b"]
-  };
+  //   "Ionica": ["1", "2", "3", "4", "5", "6", "7"],
+  //   "Dorica": ["1", "2", "3b", "4", "5", "6", "7b"],
+  //   "Frigia": ["1", "2b", "3", "4", "5", "6b", "7b"],
+  //   "Lidia": ["1", "2", "3", "4#", "5", "6", "7"],
+  //   "Misolidia": ["1", "2", "3", "4", "5", "6", "7b"],
+  //   "Eolia": ["1", "2", "3b", "4", "5", "6b", "7b"],
+  //   "Locria": ["1", "2b", "3b", "4", "5b", "6b", "7b"]
+  // };
 
   //static List<Map> get getAllScaleTypes => _scaleTypesAll;
   static List<Map> _scaleTypesAll = [
@@ -267,7 +267,7 @@ class DataMusicTheory {
       "nome": "Tredicesima minore"
     },
     {
-      "semitoni": 20,
+      "semitoni": 21,
       "intervallo": "13",
       "nome": "Tredicesima maggiore"
     },

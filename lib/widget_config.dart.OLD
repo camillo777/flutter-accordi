@@ -17,20 +17,22 @@ class WidgetConfig extends StatelessWidget {
               children: <Widget>[
                 Divider(
                   height: 15,
+                  color: Colors.transparent
                 ),
+                //BigCircle(note: model.getNotes),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-                    Text("Ottava", style: Config.TS_TITLE),
-                    CustomButton(
+                    TextTitle(text: "Ottava"),
+                    MyRoundButton2(
                       onPressed: () => model.decOctave(), 
-                      text: "-",
+                      textBold: "-",
                       enabled: model.getSelectedOctave>0?true:false,
                     ),
-                    Text(model.getSelectedOctave.toString(), style: TextStyle(fontSize: 32)),
-                    CustomButton(
+                    TextTitle(text: model.getSelectedOctave.toString(), style: TextStyle(fontSize: 32)),
+                    MyRoundButton2(
                       onPressed: () => model.incOctave(), 
-                      text: "+", 
+                      textBold: "+", 
                       enabled: model.getSelectedOctave<7?true:false,
                       ),
                   ],
@@ -47,13 +49,13 @@ class WidgetConfig extends StatelessWidget {
                           child: Container(
                               padding: EdgeInsets.all(7),
                               color: model.getSelectedTonic == note
-                                  ? Config.COLOR_MAIN_SEL
-                                  : Config.COLOR_MAIN,
+                                  ? Config.COLOR_BG_SEL
+                                  : Config.COLOR_BG,
                               child: Text(note.toString(),
                                   style: TextStyle(
                                       color: model.getSelectedTonic == note
-                                          ? Config.COLOR_TEXT_SEL
-                                          : Config.COLOR_TEXT)))))
+                                          ? Config.COLOR_TX_SEL
+                                          : Config.COLOR_TX)))))
                       .toList(),
                 ),
                 Divider(
@@ -70,14 +72,14 @@ class WidgetConfig extends StatelessWidget {
                               child: Container(
                                   padding: EdgeInsets.all(7),
                                   color: model.getSelectedScaleType == scaleType
-                                      ? Config.COLOR_MAIN_SEL
-                                      : Config.COLOR_MAIN,
+                                      ? Config.COLOR_BG_SEL
+                                      : Config.COLOR_BG,
                                   child: Text(scaleType.toString(),
                                       style: TextStyle(
                                           color: model.getSelectedScaleType ==
                                                   scaleType
-                                              ? Config.COLOR_TEXT_SEL
-                                              : Config.COLOR_TEXT))))))
+                                              ? Config.COLOR_TX_SEL
+                                              : Config.COLOR_TX))))))
                       .toList(),
                 ),
                 Divider(
@@ -87,15 +89,15 @@ class WidgetConfig extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     Text("BPM", style: Config.TS_TITLE),
-                    CustomButton(
+                    MyRoundButton(
                       onPressed: () async => await model.decBpm(), 
-                      text: "-",
+                      textBold: "-",
                       enabled: model.getBpm>0?true:false,
                     ),
                     Text(model.getBpm.toString(), style: TextStyle(fontSize: 32)),
-                    CustomButton(
+                    MyRoundButton(
                       onPressed: () async => await model.incBpm(), 
-                      text: "+", 
+                      textBold: "+", 
                       enabled: model.getBpm<200?true:false,
                       ),
                   ],
@@ -106,12 +108,12 @@ class WidgetConfig extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-                    Text("Mostra accordi per tipo", style: Config.TS_TITLE),
+                    TextTitle(text: "Mostra accordi per tipo"),
                     Switch(
                       onChanged: (bool value) async => await model.setDisplayChordsByType(value),
                       value: model.getDisplayChordsByType,
-                      activeColor: Config.COLOR_MAIN,
-                      activeTrackColor: Config.COLOR_MAIN,
+                      activeColor: Config.COLOR_LS,
+                      activeTrackColor: Config.COLOR_LA,
                     ),
                   ],
                 ),

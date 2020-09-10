@@ -1,5 +1,5 @@
 import 'dart:typed_data';
-import 'package:accordi/logger.dart';
+import 'logger.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_midi/flutter_midi.dart';
 
@@ -30,7 +30,7 @@ class AudioPlayer {
   }
 
   void playMidiNote(int note) {
-    log.i("playMidiNote");
+    log.i("playMidiNote | note:$note");
     fmPlayer.playMidiNote(midi: note);
   }
 }

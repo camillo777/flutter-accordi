@@ -1,0 +1,144 @@
+import 'viewmodel_home.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'config.dart';
+import 'logger.dart';
+import 'player.dart';
+import 'service_scale.dart';
+import 'widget_custombutton.dart';
+
+class ChordInfoOverlay extends StatefulWidget {
+  final Chord chord;
+  //final ViewModelHome model;
+
+  ChordInfoOverlay(this.chord); //, this.model);
+
+  @override
+  State<StatefulWidget> createState() => ChordInfoOverlayState();
+}
+
+class ChordInfoOverlayState extends State<ChordInfoOverlay>
+    with SingleTickerProviderStateMixin {
+  final log = getLogger("ChordInfoOverlayState");
+
+  AnimationController controller;
+  Animation<double> scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    controller =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 250));
+    scaleAnimation =
+        CurvedAnimation(parent: controller, curve: Curves.elasticInOut);
+
+    controller.addListener(() {
+      setState(() {});
+    });
+
+    controller.forward();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final ViewModelHome model = Provider.of<ViewModelHome>(context);
+
+    return Center(
+      child: Material(
+        color: Colors.red,
+        child: ScaleTransition(
+          scale: scaleAnimation,
+          child: Container(
+            margin: EdgeInsets.all(20.0),
+            padding: EdgeInsets.all(15.0),
+            //height: 180.0,
+            decoration: ShapeDecoration(
+              //color: Color.fromRGBO(41, 167, 77, 10),
+              color: Config.COLOR_BG,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+            ),
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: _buildChordDetails(widget.chord),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      MyRoundButton2(
+                        onPressed: () => playChord(model, widget.chord),
+                        textBold: "Play",
+                      ),
+                      MyRoundButton2(
+                        onPressed: () => model.addChordToCompo(widget.chord),
+                        textBold: "Aggiungi",
+                      ),
+                    ],
+                  ),
+                ]),
+          ),
+        ),
+      ),
+    );
+  }
+
+  List<Widget> _buildChordDetails(Chord chord) {
+    List<Widget> list = List<Widget>();
+
+    //Chord chord =model.getSelectedChord; //model.getChords[ model.getSelectedChord ];
+
+    if (chord == null) return list;
+
+    list.add(
+        _buildChordDetailsLine("Accordo selezionato", chord.toString(), true));
+    list.add(
+      SizedBox(
+        height: 20,
+      ),
+    );
+    list.add(_buildChordDetailsLine(
+        "Tipo di accordo: ", chord.chordType.nome, false));
+    list.add(_buildChordDetailsLine("Gruppo:", chord.chordType.gruppo, false));
+    list.add(
+        _buildChordDetailsLine("Sigla accordo", chord.chordType.sigla, false));
+    list.add(_buildChordDetailsLine(
+        "Gradi dell'accordo:", chord.chordType.gradi.join(","), false));
+    list.add(_buildChordDetailsLine(
+        "Note dell'accordo:", chord.notes.join(","), false));
+
+    return list;
+  }
+
+  Widget _buildChordDetailsLine(String label, String value, bool title) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Text("$label", style: title ? Config.TS_TITLE : Config.TS_LABEL),
+        Text("$value", style: title ? Config.TS_TITLE : Config.TS_VALUE),
+      ],
+    );
+  }
+
+  Future<void> playChord(ViewModelHome model, Chord chord) async {
+    int noteDuration = (1000 / chord.notes.length).floor();
+
+    for (int i = 0; i < chord.notes.length; i++) {
+      Note n = chord.notes[i];
+      log.i("play:${n.toString()}");
+      int note = model.getMidiNote(n);
+      player.playMidiNote(note);
+      await Future.delayed(Duration(milliseconds: noteDuration), () => "1");
+    }
+  }
+}
