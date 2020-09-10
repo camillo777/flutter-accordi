@@ -20,7 +20,6 @@ class WidgetChoose extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ViewModelChoose model = Provider.of<ViewModelChoose>(context);
-
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
