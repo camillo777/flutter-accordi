@@ -35,6 +35,9 @@ lib/generated_plugin_registrant.dart
 
 # Exceptions to above rules.
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
+
+# gibo dump Archives Backup Android Dart DartEditor Emacs Gradle Java JetBrains Jenv Kotlin Linux macOS Maven Objective-C SublimeText Vim VisualStudioCode Windows Xcode >> .gitignore
+
 ### https://raw.github.com/github/gitignore/218a941be92679ce67d0484547e3e142b2f5f6f0/Global/Archives.gitignore
 
 # It's better to unpack these files and commit the raw source because
