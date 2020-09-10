@@ -1,5 +1,4 @@
 import 'package:accordi/viewmodel_audiotoggle.dart';
-import 'package:accordi/widget_chord_finder.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -8,9 +7,7 @@ import 'view_settings.dart';
 import 'viewmodel_home.dart';
 import 'viewmodel_startup.dart';
 import 'widget_choose.dart';
-import 'widget_composer.dart';
 import 'widget_custombutton.dart';
-import 'widget_home.dart';
 
 class ViewHome extends StatelessWidget {
   @override
