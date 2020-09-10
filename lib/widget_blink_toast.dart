@@ -64,7 +64,9 @@ AnimationController _controller;
   void initState() {
     super.initState();
     _controller = new AnimationController(
-        duration: const Duration(milliseconds: 500), vsync: this);
+        duration: const Duration(milliseconds: 500), 
+        vsync: this,
+        );
     _animation = new Tween(begin: 0.0, end: 1.0).animate(new CurvedAnimation(
       parent: _controller,
       curve: new Interval(0.0, 0.5)
