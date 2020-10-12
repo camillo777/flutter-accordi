@@ -7,7 +7,10 @@ import 'view_settings.dart';
 import 'viewmodel_home.dart';
 import 'viewmodel_startup.dart';
 import 'widget_choose.dart';
+import 'widget_chord_finder.dart';
+import 'widget_composer.dart';
 import 'widget_custombutton.dart';
+import 'widget_home.dart';
 
 class ViewHome extends StatelessWidget {
   @override
@@ -67,13 +70,13 @@ class ViewHome extends StatelessWidget {
                   builder: (_, modelStartup, child) => !modelStartup.isReady
                       ? CircularProgressIndicator()
                       : Consumer<ViewModelHome>(builder: (_,model,child) { 
-                          return WidgetChoose();
-                          // switch(model.getCurrentPage){
-                          //   case AppPage.FindChord: return WidgetChordFinder();
-                          //   case AppPage.MakeScale: return WidgetChoose();
-                          //   case AppPage.Composer: return WidgetComposer();
-                          //   default: return WidgetHome();
-                          // }
+                          //return WidgetChoose();
+                          switch(model.getCurrentPage){
+                            case AppPage.FindChord: return WidgetChordFinder();
+                            case AppPage.MakeScale: return WidgetChoose();
+                            case AppPage.Composer: return WidgetComposer();
+                            default: return WidgetHome();
+                          }
                       }),),
       ),
     ),);
