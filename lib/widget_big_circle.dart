@@ -84,7 +84,7 @@ class _BigCircleState extends State<BigCircle> with TickerProviderStateMixin {
   List<Widget> _getList(ViewModelChoose model, double animOffset) {
     List<Widget> list = List<Widget>();
 
-    double screenWidth = MediaQuery.of(context).size.width;
+    double screenWidth = min( MediaQuery.of(context).size.width, MediaQuery.of(context).size.height);
     double parentWidth = screenWidth * 0.8;
     double circlew = screenWidth * 0.3;
 
