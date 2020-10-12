@@ -2,7 +2,7 @@ import 'package:accordi/viewmodel_composer.dart';
 
 import 'widget_custombutton.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:provider/provider.dart' hide BuildContext;
 
 import 'config.dart';
 import 'logger.dart';

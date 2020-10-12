@@ -5,7 +5,7 @@ import 'viewmodel_audiotoggle.dart';
 import 'widget_custombutton.dart';
 import 'widget_big_circle.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:provider/provider.dart' hide BuildContext;
 
 import 'config.dart';
 import 'logger.dart';
@@ -1070,6 +1070,7 @@ Widget _buildChordsByTonic2(BuildContext context, ViewModelChoose model) {
        child: 
       
       Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.start,
         children: 
           model.getChordTypesByGruppoMap.keys.map((e) => 

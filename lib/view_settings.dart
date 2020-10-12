@@ -1,6 +1,6 @@
 import 'package:accordi/viewmodel_settings.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:provider/provider.dart' hide BuildContext;
 
 import 'config.dart';
 import 'widget_custombutton.dart';

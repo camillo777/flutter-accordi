@@ -1,7 +1,7 @@
 import 'package:accordi/widget_chord_finder.dart';
 import 'package:accordi/widget_custombutton.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:provider/provider.dart' hide BuildContext;
 import 'config.dart';
 import 'player.dart';
 
