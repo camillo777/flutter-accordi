@@ -169,10 +169,7 @@ class ViewModelChoose extends ChangeNotifier {
   //   await player.prepare(sf2: _sound, name: "Piano.sf2");
   // }
 
-  int getMidiNote(Note note) {
-    int noteIndex = _serviceScale.getAllNotes.indexOf(note.id);
-    return 36 + (12*note.octave-1) + noteIndex; // C2
-  }
+  
 
   //Future<void> playMidiNote(String note) async => await player.playMidiNote(midi: getMidiNote(note));
 
@@ -251,7 +248,7 @@ class ViewModelChoose extends ChangeNotifier {
   Map<String,List<ChordType>> get getChordTypesByGruppoMap => _serviceScale.getChordTypesByGruppoMap;
   
   List<ScaleType> get getScaleTypes => _serviceScale.getScaleTypes;
-  List<String> get getNotes => _serviceScale.getAllNotes;
+  List<String> get getNotes => ServiceScale.getAllNotes;
 
 
   void addChordToCompo(Chord chord) { //Chord chord) {

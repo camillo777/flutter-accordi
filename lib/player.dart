@@ -1,4 +1,6 @@
 import 'dart:typed_data';
+import 'package:accordi/service_scale.dart';
+
 import 'logger.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/services.dart';
@@ -19,24 +21,27 @@ class AudioPlayer {
   void load(AssetBundle bundle) async {
     log.i("load");
 
-    String asset = "assets/sounds/Piano.sf2";
-    log.i("Loading asset [$asset]...");
-    _sound = await bundle.load(asset);
-    //await player.unmute();
+    if (!kIsWeb) {
+      String asset = "assets/sounds/Piano.sf2";
+      log.i("Loading asset [$asset]...");
+      _sound = await bundle.load(asset);
+      //await player.unmute();
 
-    log.i("Preparing player...");
-    await fmPlayer.prepare(sf2: _sound, name: "Piano.sf2");
+      log.i("Preparing player...");
+      await fmPlayer.prepare(sf2: _sound, name: "Piano.sf2");
+    }
 
     log.i("Initialization DONE");
     loaded = true;
   }
 
-  void playMidiNote(int note) {
-    log.i("playMidiNote | note:$note");
+  void playMidiNote(Note note /*int note*/) {
+    log.i("playMidiNote | note:${note.toStringShort()}");
     if (!kIsWeb) {
-      fmPlayer.playMidiNote(midi: note);
+      int midiNote = ServiceScale.getMidiNote(note);
+      fmPlayer.playMidiNote(midi: midiNote);
     } else {
-      js.context.callMethod("playNote", [note /*"C5"*/, "8n"]);
+      js.context.callMethod("playNote", ["${note.toStringShort()}" /*"C5"*/, "8n"]);
     }
   }
 }

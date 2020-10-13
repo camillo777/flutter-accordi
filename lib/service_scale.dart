@@ -118,6 +118,8 @@ class Note {
   @override
   String toString() => "$id $octave";
 
+  String toStringShort() => "$id$octave";
+
   void incOctave() => octave++;
   void decOctave() => octave--;
 
@@ -264,7 +266,7 @@ class ServiceScale {
   // final List<Note> _notes = List<Note>();
   // List<Note> get getBaseNotes => _notes;
 
-  List<String> _notes = [
+  static List<String> _notes = [
     "C",
     "C#",
     "D",
@@ -278,7 +280,12 @@ class ServiceScale {
     "A#",
     "B"
   ];
-  List<String> get getAllNotes => _notes;
+  static List<String> get getAllNotes => _notes;
+
+  static int getMidiNote(Note note) {
+    int noteIndex = /*_serviceScale.getAllNotes*/ getAllNotes.indexOf(note.id);
+    return 36 + (12*note.octave-1) + noteIndex; // C2
+  }
 
   static Map<String, Map<NoteLang,String>> noteNamesLang = 
   {

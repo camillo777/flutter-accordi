@@ -20,6 +20,7 @@ class WidgetChoose extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ViewModelChoose model = Provider.of<ViewModelChoose>(context);
+
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -208,8 +209,8 @@ class WidgetChoose extends StatelessWidget {
       Note n = chord.notes[i]; // chord.notes[index];
 
       log.i("play:${n.toString()}");
-      int note = model.getMidiNote(n);
-      player.playMidiNote(note);
+      //int note = model.getMidiNote(n);
+      player.playMidiNote(n);
       await Future.delayed(Duration(milliseconds: noteDuration), () => "1");
     }
 
@@ -223,10 +224,10 @@ class WidgetChoose extends StatelessWidget {
           //MyRoundButton2(
           textBold: "${model.getNoteDisplayName(note.id)}",
           onPressed: () {
-            int midiNote = model.getMidiNote(note);
-            log.i("midiNote:$midiNote");
-            log.i("ply MIDI note");
-            player.playMidiNote(midiNote);
+            //int midiNote = ServiceScale.getMidiNote(note);
+            //log.i("midiNote:$midiNote");
+            log.i("ply MIDI note: ${note.toString()}");
+            player.playMidiNote(note);
           },
         ),
         MyRoundedEdgeText(
@@ -885,6 +886,103 @@ class WidgetChoose extends StatelessWidget {
       ),
     );
   }
+
+  static const double kTileW = 60;
+  static const double kTileH = 60;
+  static const int kRows = 7;
+  Widget _buildChordsByTonic2(BuildContext context, ViewModelChoose model) {
+    //ViewModelSettings modelSettings = Provider.of<ViewModelSettings>(context);
+    final ViewModelAudioToggle modelAudioToggle =
+        Provider.of<ViewModelAudioToggle>(context);
+
+    return SingleChildScrollView(
+        primary: true,
+        scrollDirection: Axis.vertical,
+        // child: SizedBox(
+        //   width: MediaQuery.of(context).size.width,
+        //   height: kRows*kTileH, //MediaQuery.of(context).size.height * 0.5,
+        child: Column(
+            //crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: model.getChordTypesByGruppoMap.keys
+                .map((e) => Row(children: <Widget>[
+                      RotatedBox(
+                        quarterTurns: 1,
+                        child: Text(e),
+                      ),
+                      Row(
+                          children: List.generate(
+                              7,
+                              (key) => Column(
+                                    children: <Widget>[
+                                          Text("${model.getScale[key].id}")
+                                        ] +
+                                        model.getChordTypesByGruppoMap[e]
+                                            .map((chordType) {
+                                          Note note = model.getScale[key];
+                                          int index = model
+                                              .getChordsByNoteMap[note.id]
+                                              .indexWhere((chord) =>
+                                                  chord.chordType.nome ==
+                                                  chordType.nome);
+                                          if (index != -1) {
+                                            Chord chord = model
+                                                    .getChordsByNoteMap[note.id]
+                                                [index];
+                                            return ChordTile(
+                                              chord: chord,
+                                              kTileW: kTileW,
+                                              kTileH: kTileH, 
+                                              onPressed: () => playChord(model, chord, modelAudioToggle.getAudioOn),
+                                            );
+                                          }
+
+                                          /*return index != -1
+                                              ? TextTile(
+                                                  text: chordType.sigla,
+                                                  kTileW: kTileW,
+                                                  kTileH: kTileH,
+                                                )
+                                              :*/
+                                          return TextTile(
+                                            text: "",
+                                            kTileW: kTileW,
+                                            kTileH: kTileH,
+                                          );
+                                          /*? ListTile(
+                                                  /*onTap: () => playChord(model,
+                                                      chord, model.getAudioOn),*/
+                                                  title: Text(
+                                                      "${chordType.sigla}"),
+                                                )
+                                              : TextTile(
+                                                  text: "",
+                                                  kTileW: kTileW,
+                                                  kTileH: kTileH,
+                                                );*/
+                                        }).toList(),
+                                  )).toList()),
+                    ]))
+                .toList())
+
+        // GridView.count(
+        //   crossAxisSpacing: 0,
+        //   mainAxisSpacing: 0,
+        //   padding: EdgeInsets.all(0),
+        //     scrollDirection: Axis.horizontal,
+        //     crossAxisCount: kRows, // n rows
+        //     children: model.getChords
+        //         .map(
+        //           (c) => ChordTile(chord: c),
+        //           //),
+        //         )
+        //         .toList()
+        //     //}
+        //     ),
+        //),
+        //),
+        );
+  }
 }
 
 //   Widget _buildBigGrid(BuildContext context, ViewModelChoose model) {
@@ -1057,89 +1155,33 @@ class WidgetChoose extends StatelessWidget {
 //   }
 // }
 
-const double kTileW = 60;
-const double kTileH = 60;
-const int kRows = 7;
-Widget _buildChordsByTonic2(BuildContext context, ViewModelChoose model) {
-  return SingleChildScrollView(
-    primary: true,
-    scrollDirection: Axis.vertical,
-    // child: SizedBox(
-    //   width: MediaQuery.of(context).size.width,
-    //   height: kRows*kTileH, //MediaQuery.of(context).size.height * 0.5,
-       child: 
-      
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: 
-          model.getChordTypesByGruppoMap.keys.map((e) => 
-          Row(
-          children: <Widget>[ 
-            RotatedBox(
-      quarterTurns: 1,
-      child: Text(e),
-    ), 
-            Row(
-              children: 
-            List.generate(7, (index) => Column(
-            children: 
-              <Widget>[Text("${model.getScale[index].id}")]+
-              model.getChordTypesByGruppoMap[e].map((value) => 
-                model.getChordsByNoteMap[model.getScale[index].id].indexWhere((chord)=>chord.chordType.nome==value.nome)!=-1?
-                TextTile(text: value.sigla):TextTile(text:"")
-                ).toList(),
-              )
-              ).toList()
-        ),
-          ]
-      )).toList()
-      )
-      
-      // GridView.count(
-      //   crossAxisSpacing: 0,
-      //   mainAxisSpacing: 0,
-      //   padding: EdgeInsets.all(0),
-      //     scrollDirection: Axis.horizontal,
-      //     crossAxisCount: kRows, // n rows
-      //     children: model.getChords
-      //         .map(
-      //           (c) => ChordTile(chord: c),
-      //           //),
-      //         )
-      //         .toList()
-      //     //}
-      //     ),
-      //),
-    //),
-  );
-}
-
 class TextTile extends StatelessWidget {
   final String text;
+  final double kTileW;
+  final double kTileH;
 
-  const TextTile({Key key, this.text}) : super(key: key);
+  const TextTile(
+      {Key key,
+      @required this.text,
+      @required this.kTileW,
+      @required this.kTileH})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     //final ViewModelChoose model = Provider.of<ViewModelChoose>(context);
 
-    return 
-     SizedBox(
-       width: kTileW,
-       height: kTileH,
-       child: 
-      Padding(
+    return SizedBox(
+      width: kTileW,
+      height: kTileH,
+      child: Padding(
         padding: EdgeInsets.fromLTRB(1, 1, 0, 0),
-      child: 
-      Container(
-        //padding: EdgeInsets.fromLTRB(0, 1, 0, 1),
-        alignment: Alignment.center,
-        color: Config.COLOR_LS,
-        child: Text(
-          "$text", 
-          style: TextStyle(color: Config.COLOR_DS)),
-      ),
+        child: Container(
+          //padding: EdgeInsets.fromLTRB(0, 1, 0, 1),
+          alignment: Alignment.center,
+          color: Config.COLOR_LS,
+          child: Text("$text", style: TextStyle(color: Config.COLOR_DS)),
+        ),
       ),
     );
   }
@@ -1147,23 +1189,32 @@ class TextTile extends StatelessWidget {
 
 class ChordTile extends StatelessWidget {
   final Chord chord;
+  final double kTileW;
+  final double kTileH;
+  final Function onPressed;
 
-  const ChordTile({Key key, this.chord}) : super(key: key);
+  const ChordTile(
+      {Key key,
+      @required this.chord,
+      @required this.kTileW,
+      @required this.kTileH, @required this.onPressed})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final ViewModelChoose model = Provider.of<ViewModelChoose>(context);
 
-    return 
-     SizedBox(
-       width: kTileW,
-       height: kTileH,
-       child: 
-      Container(
-        alignment: Alignment.center,
-        color: Colors.red,
-        child: Text("${model.getNoteDisplayName(chord.note.id)} ${chord.chordType.sigla}"),
-      ),
+    return SizedBox(
+      width: kTileW,
+      height: kTileH,
+      child: Container(
+          alignment: Alignment.center,
+          color: Colors.red,
+          child: MaterialButton(
+            onPressed: onPressed,
+            child: Text(
+                "${model.getNoteDisplayName(chord.note.id)} ${chord.chordType.sigla}"),
+          )),
     );
   }
 }

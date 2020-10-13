@@ -90,12 +90,12 @@ final ServiceSettings _serviceSettings = GetIt.I.get<ServiceSettings>();
 
     //log.i("start: $start");
 
-    if (start >= _serviceScale.getAllNotes.length)
-      start = start % _serviceScale.getAllNotes.length;
+    if (start >= ServiceScale.getAllNotes.length)
+      start = start % ServiceScale.getAllNotes.length;
 
     //log.i("start: $start");
 
-    String noteID = _serviceScale.getAllNotes[start];
+    String noteID = ServiceScale.getAllNotes[start];
 
     return noteID;
   }
@@ -116,7 +116,7 @@ final ServiceSettings _serviceSettings = GetIt.I.get<ServiceSettings>();
 
       String bass = notes[0];
 
-      int index0 = _serviceScale.getAllNotes.indexWhere((note) => note == bass);
+      int index0 = ServiceScale.getAllNotes.indexWhere((note) => note == bass);
       //log.i("$index0 ${_serviceScale.getAllNotes[index0]}");
 
       for (int i = 1; i < notes.length; i++) {
@@ -124,7 +124,7 @@ final ServiceSettings _serviceSettings = GetIt.I.get<ServiceSettings>();
         // int nextIndex =
         //   _serviceScale.getAllNotes.indexWhere((note) => note == notes[i-1]);
         int index =
-            _serviceScale.getAllNotes.indexWhere((note) => note == notes[i]);
+            ServiceScale.getAllNotes.indexWhere((note) => note == notes[i]);
         //log.i("$index ${_serviceScale.getAllNotes[index]}");
 
         int diff = index - index0;

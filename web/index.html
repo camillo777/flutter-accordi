@@ -32,6 +32,7 @@
   <script>
     function playNote(note, duration) {
       var synth = new Tone.Synth().toDestination();
+      console.log("[javascript:] n:"+note+" d:"+duration);
       synth.triggerAttackRelease(note, duration);
     }
   </script>
