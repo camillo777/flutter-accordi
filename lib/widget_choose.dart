@@ -887,10 +887,11 @@ class WidgetChoose extends StatelessWidget {
     );
   }
 
-  static const double kTileW = 60;
-  static const double kTileH = 60;
-  static const int kRows = 7;
   Widget _buildChordsByTonic2(BuildContext context, ViewModelChoose model) {
+    double kTileW = MediaQuery.of(context).size.width / 16;// 15;
+    double kTileH = kTileW;
+    //int kRows = 7;
+
     //ViewModelSettings modelSettings = Provider.of<ViewModelSettings>(context);
     final ViewModelAudioToggle modelAudioToggle =
         Provider.of<ViewModelAudioToggle>(context);
@@ -912,44 +913,61 @@ class WidgetChoose extends StatelessWidget {
                       ),
                       Row(
                           children: List.generate(
-                              7,
-                              (key) => Column(
-                                    children: <Widget>[
-                                          Text("${model.getScale[key].id}")
-                                        ] +
-                                        model.getChordTypesByGruppoMap[e]
-                                            .map((chordType) {
-                                          Note note = model.getScale[key];
-                                          int index = model
-                                              .getChordsByNoteMap[note.id]
-                                              .indexWhere((chord) =>
-                                                  chord.chordType.nome ==
-                                                  chordType.nome);
-                                          if (index != -1) {
-                                            Chord chord = model
-                                                    .getChordsByNoteMap[note.id]
-                                                [index];
-                                            return ChordTile(
-                                              chord: chord,
-                                              kTileW: kTileW,
-                                              kTileH: kTileH, 
-                                              onPressed: () => playChord(model, chord, modelAudioToggle.getAudioOn),
+                              8,
+                              (key) => key == 0
+                                  ? Column(
+                                      children: <Widget>[] +
+                                          [Text("")] +
+                                          model.getChordTypesByGruppoMap[e]
+                                              .map((chordType) {
+                                            return TextTile(
+                                              text: "${chordType.sigla}",
+                                              kTileW: kTileW * 4,
+                                              kTileH: kTileH,
                                             );
-                                          }
+                                          }).toList())
+                                  : Column(
+                                      children: <Widget>[
+                                            Text(
+                                                "${model.getScale[key - 1].id}")
+                                          ] +
+                                          model.getChordTypesByGruppoMap[e]
+                                              .map((chordType) {
+                                            Note note = model.getScale[key - 1];
+                                            int index = model
+                                                .getChordsByNoteMap[note.id]
+                                                .indexWhere((chord) =>
+                                                    chord.chordType.nome ==
+                                                    chordType.nome);
+                                            if (index != -1) {
+                                              Chord chord =
+                                                  model.getChordsByNoteMap[
+                                                      note.id][index];
+                                              return ChordTile(
+                                                chord: chord,
+                                                kTileW: kTileW,
+                                                kTileH: kTileH,
+                                                onPressed: () => playChord(
+                                                    model,
+                                                    chord,
+                                                    modelAudioToggle
+                                                        .getAudioOn),
+                                              );
+                                            }
 
-                                          /*return index != -1
+                                            /*return index != -1
                                               ? TextTile(
                                                   text: chordType.sigla,
                                                   kTileW: kTileW,
                                                   kTileH: kTileH,
                                                 )
                                               :*/
-                                          return TextTile(
-                                            text: "",
-                                            kTileW: kTileW,
-                                            kTileH: kTileH,
-                                          );
-                                          /*? ListTile(
+                                            return TextTile(
+                                              text: "",
+                                              kTileW: kTileW,
+                                              kTileH: kTileH,
+                                            );
+                                            /*? ListTile(
                                                   /*onTap: () => playChord(model,
                                                       chord, model.getAudioOn),*/
                                                   title: Text(
@@ -960,8 +978,8 @@ class WidgetChoose extends StatelessWidget {
                                                   kTileW: kTileW,
                                                   kTileH: kTileH,
                                                 );*/
-                                        }).toList(),
-                                  )).toList()),
+                                          }).toList(),
+                                    )).toList()),
                     ]))
                 .toList())
 
@@ -1197,7 +1215,8 @@ class ChordTile extends StatelessWidget {
       {Key key,
       @required this.chord,
       @required this.kTileW,
-      @required this.kTileH, @required this.onPressed})
+      @required this.kTileH,
+      @required this.onPressed})
       : super(key: key);
 
   @override
@@ -1212,8 +1231,9 @@ class ChordTile extends StatelessWidget {
           color: Colors.red,
           child: MaterialButton(
             onPressed: onPressed,
-            child: Text(
-                "${model.getNoteDisplayName(chord.note.id)} ${chord.chordType.sigla}"),
+            child: Icon(Icons.play_arrow),
+            /*Text(
+                "${model.getNoteDisplayName(chord.note.id)} ${chord.chordType.sigla}"),*/
           )),
     );
   }

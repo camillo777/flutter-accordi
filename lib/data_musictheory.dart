@@ -179,7 +179,7 @@ class DataMusicTheory {
     {
       "semitoni": 6,
       "intervallo": "5b",
-      "nome": "Quarta diminuita"
+      "nome": "Quinta diminuita"
     },
     {
       "semitoni": 6,
@@ -318,6 +318,13 @@ class DataMusicTheory {
     },
     {
       "gruppo": "Maggiori",
+      "sigla": "9",
+      "nome": "Nona",
+      "gradi": ["1", "3", "7b", "9"], // senza quinta!
+// V
+    },
+    {
+      "gruppo": "Maggiori",
       "sigla": "7+9",
       "nome": "Nona aumentata",
       "gradi": ["1", "3", "5", "7b", "9#"],
@@ -398,6 +405,13 @@ class DataMusicTheory {
       "sigla": "m9",
       "nome": "Minore nona",
       "gradi": ["1", "3b", "5", "7b", "9"],
+// II, VI
+    },
+    {
+      "gruppo": "Minori",
+      "sigla": "m9",
+      "nome": "Minore nona",
+      "gradi": ["1", "3b", "7b", "9"], // senza quinta!
 // II, VI
     },
     {

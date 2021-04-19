@@ -194,12 +194,14 @@ class ViewModelChoose extends ChangeNotifier {
     log.i("incOctave");
     //if (_serviceScale.incOctave()) makeScale();
     _serviceScale.incOctave();
+    makeScale();
     notifyListeners();
   }
   void decOctave() {
     log.i("incOctave");
     //if (_serviceScale.decOctave()) makeScale();
     _serviceScale.decOctave();
+    makeScale();
     notifyListeners();
   }
 

@@ -1,10 +1,8 @@
 import 'package:accordi/logger.dart';
-import 'package:accordi/service_scale.dart';
 import 'package:accordi/viewmodel_chord_finder.dart';
 import 'package:accordi/widget_custombutton.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
-import 'package:provider/provider.dart' hide BuildContext;
+import 'package:provider/provider.dart';
 
 import 'config.dart';
 
@@ -42,10 +40,10 @@ class _WidgetChordFinderState extends State<WidgetChordFinder> {
                 Text("${modelCF.getSelectedNotes.join(",")}"),
                 MyDivider(),
                 Text(
-                    "${modelCF.getSelectedChords.map((fc) => fc.missingNotes.length == 0 ? "${fc.chord.note.id} ${fc.chord.chordType.sigla} (${fc.chord.chordType.nome})" : "").join(", ")}"),
+                    "${modelCF.getSelectedChords.map((fc) => fc.missingNotes.length == 0 ? "${fc.chord.note.id} ${fc.chord.chordType.sigla} [${fc.chord.chordType.nome}] ${fc.chord.notes.map((e) => "[${e.id} ${e.grado}]")}" : "").join(", ")}"),
                 MyDivider(),
                 Text(
-                    "${modelCF.getSelectedChords.map((fc) => "${fc.chord.chordType.sigla} ${fc.missingNotes.join(",")}").join(", ")}"),
+                    "${modelCF.getSelectedChords.map((fc) => fc.missingNotes.length > 0 ? "${fc.chord.chordType.sigla} ${fc.missingNotes.join(",")}" : "").join(", ")}"),
               ],
             ),
           ),
@@ -54,17 +52,19 @@ class _WidgetChordFinderState extends State<WidgetChordFinder> {
     );
   }
 
+  String printFoundChord(FoundChord foundChord) {}
+
   Widget _buildString(ViewModelChordFinder modelCF, int string) {
     List<int> frets = modelCF.getGuitarNeck[string];
 
-    List<Widget> list = List<Widget>();
+    List<Widget> list = [];
 
     //selectedNotes.clear();
 
     for (int i = 0; i < frets.length; i++) {
       int fret = frets[i];
 
-      String noteID = modelCF.getNoteID(string, i);
+      String noteID = modelCF.getNoteIDFromNeck(string, i);
       //log.i("noteID:$noteID");
 
       //if (fret==1) selectedNotes.add(noteID);
